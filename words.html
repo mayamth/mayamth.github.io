@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#121211">
+<title>Etymology adventures · Maya Mathur</title>
+<style>
+  html { background: #121211; }
+  body {
+    margin: 0;
+    padding: 64px 24px 96px;
+    color: #d6d4cf;
+    font: 16px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 540px; margin: 0 auto; position: relative; z-index: 1; }
+  .me { display: block; width: 100%; max-width: 180px; height: auto; margin: 0 0 28px; }
+  h1 { font-size: 16px; font-weight: 600; margin: 0 0 24px; color: #f2f0ea; }
+  p { margin: 0 0 16px; }
+  a { color: #f2f0ea; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #6b6964; }
+  a:hover { text-decoration-color: #f2f0ea; }
+  details { margin: 0 0 8px; }
+  strong { color: #f2f0ea; font-weight: 600; }
+  summary { cursor: pointer; list-style: none; color: #f2f0ea; }
+  summary::-webkit-details-marker { display: none; }
+  summary::before { content: "+ "; color: #8a8782; }
+  details[open] summary::before { content: "\2212  "; }
+  ul { margin: 6px 0 16px; padding-left: 20px; }
+  li { margin: 2px 0; }
+  hr { border: 0; border-top: 1px solid #2b2a28; margin: 32px 0; }
+  .links a { margin-right: 16px; }
+  .small { font-size: 13px; color: #8a8782; }
+  svg.neuron { position: fixed; pointer-events: none; z-index: 0; overflow: visible; transition: opacity 1.6s ease 1.4s; }
+  svg.neuron path { fill: none; stroke: #f2f0ea; stroke-linecap: round; }
+  .entry { margin: 0 0 30px; }
+  .date { font-size: 13px; color: #8a8782; margin: 0 0 4px; font-variant-numeric: tabular-nums; }
+  .word { color: #f2f0ea; font-weight: 600; margin: 0 0 4px; }
+  .entry p { margin: 0; }
+  .entry em { color: #f2f0ea; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Etymology adventures</h1>
+
+  <p>A short diary of words with good histories.</p>
+
+  <hr>
+
+  <div class="entry">
+    <p class="date">10.09.26</p>
+    <p class="word">jaundice</p>
+    <p>From Middle English <em>jaundis</em> (or <em>jaunis</em>), borrowed around 1300 from Old French <em>jaunisse</em>, "yellowness": <em>jaune</em>, yellow, and <em>-isse</em>, -ness.</p>
+  </div>
+
+  <div class="entry">
+    <p class="date">05.09.26</p>
+    <p class="word">breath</p>
+    <p><em>Spiritus</em>, Latin for breath, gives us spirit, inspire, expire: to breathe in, to breathe out.</p>
+  </div>
+
+  <div class="entry">
+    <p class="date">20.08.26</p>
+    <p class="word">refrain</p>
+    <p>Refrain has two roots: Latin <em>frenum</em>, a bridle, and <em>refraindre</em>, to break, which in Old French also meant to repeat.</p>
+  </div>
+
+  <div class="entry">
+    <p class="date">12.07.26</p>
+    <p class="word">mettā</p>
+    <p>is <em>mitta</em>: friend.</p>
+  </div>
+
+  <hr>
+
+  <p class="links"><a href="index.html">&larr; Back</a></p>
+</main>
+
+<script>
+(function () {
+  var NS = "http://www.w3.org/2000/svg";
+  function branch(x, y, ang, len, w, depth, paths) {
+    var d = "M" + x.toFixed(1) + " " + y.toFixed(1), steps = 4 + Math.floor(Math.random() * 3);
+    for (var i = 0; i < steps; i++) {
+      ang += (Math.random() - .5) * .7;
+      x += Math.cos(ang) * len / steps; y += Math.sin(ang) * len / steps;
+      d += " L" + x.toFixed(1) + " " + y.toFixed(1);
+    }
+    paths.push({ d: d, w: w });
+    if (depth > 0) {
+      var n = 1 + Math.floor(Math.random() * 2);
+      for (var k = 0; k < n; k++) branch(x, y, ang + (Math.random() - .5) * 1.4, len * (.5 + Math.random() * .25), w * .65, depth - 1, paths);
+    }
+  }
+  document.addEventListener("click", function (e) {
+    if (e.target.closest("a, summary")) return;
+    var paths = [], size = 300, c = size / 2;
+    var arms = 5 + Math.floor(Math.random() * 3);
+    for (var i = 0; i < arms; i++) {
+      var a = (i / arms) * Math.PI * 2 + Math.random() * .6;
+      var axon = i === 0;
+      branch(c, c, a, axon ? 120 : 34 + Math.random() * 22, axon ? 1.4 : 1.6, axon ? 1 : 2, paths);
+    }
+    var svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("class", "neuron");
+    svg.setAttribute("width", size); svg.setAttribute("height", size);
+    svg.style.left = (e.clientX - c) + "px"; svg.style.top = (e.clientY - c) + "px";
+    paths.forEach(function (p, idx) {
+      var el = document.createElementNS(NS, "path");
+      el.setAttribute("d", p.d); el.setAttribute("stroke-width", p.w);
+      svg.appendChild(el);
+      var L = el.getTotalLength ? 400 : 0;
+      el.style.strokeDasharray = L; el.style.strokeDashoffset = L;
+      el.style.transition = "stroke-dashoffset 1.1s ease-out " + (idx * 0.015) + "s";
+    });
+    var soma = document.createElementNS(NS, "circle");
+    soma.setAttribute("cx", c); soma.setAttribute("cy", c); soma.setAttribute("r", 4.5);
+    soma.setAttribute("fill", "#f2f0ea");
+    svg.appendChild(soma);
+    document.body.appendChild(svg);
+    svg.getBoundingClientRect();
+    svg.querySelectorAll("path").forEach(function (p) { p.style.strokeDashoffset = 0; });
+    svg.style.opacity = 0;
+    setTimeout(function () { svg.remove(); }, 3400);
+  });
+})();
+</script>
+</body>
+</html>
